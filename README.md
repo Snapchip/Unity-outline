@@ -21,4 +21,3 @@ color, size outlines at the same time.
 For outlines with different properties multiple buffers can be drawn, or in the
 case of Universal render pipeline, multiple passes can be added, one for each set
 of properties.
-Unity object outlines for Built-in render pipeline and URP
