@@ -28,6 +28,10 @@ class OutlinePass : ScriptableRenderPass
     private RenderStateBlock m_RenderStateZTestOff;
     private RenderStateBlock m_RenderStateZTestOn;
     private FilteringSettings m_FilteringSettings;
+    private RenderTargetHandle objectsID;
+    private RenderTargetHandle blurredID;
+    private RenderTargetHandle screenCopyID;
+    private RenderTargetHandle tempID;
 
     public OutlineSettings settings;
     public RenderTargetIdentifier cameraTarget;    
@@ -52,10 +56,7 @@ class OutlinePass : ScriptableRenderPass
             depthState = new DepthState { writeEnabled = false, compareFunction = CompareFunction.LessEqual }
         };
     }
-    RenderTargetHandle objectsID;
-    RenderTargetHandle blurredID;
-    RenderTargetHandle screenCopyID;
-    RenderTargetHandle tempID;
+    
     public override void Configure(CommandBuffer cmd, RenderTextureDescriptor cameraTextureDescriptor)
     {
         objectsID.Init("_ObjectsTex");        
