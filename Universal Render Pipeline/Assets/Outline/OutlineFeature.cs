@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
 public class OutlineFeature : ScriptableRendererFeature
@@ -41,7 +42,11 @@ public class OutlineFeature : ScriptableRendererFeature
             downsample = settings.downsample,
             drawOnTop = settings.drawOnTop,
         };
-        m_OutlinePass.cameraTarget = renderer.cameraColorTarget;       
+
+        RenderTargetIdentifier cameraTargetID = new RenderTargetIdentifier(BuiltinRenderTextureType.CameraTarget);
+        m_OutlinePass.cameraDepth = renderer.cameraDepth == cameraTargetID ? renderer.cameraColorTarget : renderer.cameraDepth;       
+        m_OutlinePass.cameraColorTarget = renderer.cameraColorTarget;
+
         renderer.EnqueuePass(m_OutlinePass);
     }
     private void CreateMaterials(OutlinePass.OutlineMaterials materials)

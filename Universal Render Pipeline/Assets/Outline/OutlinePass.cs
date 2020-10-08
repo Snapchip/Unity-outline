@@ -34,7 +34,8 @@ class OutlinePass : ScriptableRenderPass
     private RenderTargetHandle tempID;
 
     public OutlineSettings settings;
-    public RenderTargetIdentifier cameraTarget;    
+    public RenderTargetIdentifier cameraColorTarget;
+    public RenderTargetIdentifier cameraDepth;
     public OutlinePass(LayerMask layerMask, OutlineMaterials materials, string profilerTag)
     {
         m_ProfilerTag = profilerTag;        
@@ -77,7 +78,7 @@ class OutlinePass : ScriptableRenderPass
         cmd.GetTemporaryRT(tempID.id, descriptor, FilterMode.Bilinear);
         cmd.GetTemporaryRT(screenCopyID.id, cameraTextureDescriptor);
 
-        ConfigureTarget(objectsID.id, cameraTarget);
+        ConfigureTarget(objectsID.id, cameraDepth);
         ConfigureClear(ClearFlag.Color, Color.clear);
     }
     
@@ -110,8 +111,8 @@ class OutlinePass : ScriptableRenderPass
             // vertical blur
             cmd.SetGlobalVector("_OutlineOffsets", new Vector4(0, blurSize / desc.height, 0, 0));
             Blit(cmd, tempID.id, blurredID.id, m_materials.BlurMaterial);
-            Blit(cmd, cameraTarget, screenCopyID.id, m_materials.OutlineMaterial);
-            Blit(cmd, screenCopyID.id, cameraTarget);            
+            Blit(cmd, cameraColorTarget, screenCopyID.id, m_materials.OutlineMaterial);
+            Blit(cmd, screenCopyID.id, cameraColorTarget);            
         }        
         context.ExecuteCommandBuffer(cmd);
         CommandBufferPool.Release(cmd);
